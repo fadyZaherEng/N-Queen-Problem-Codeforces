@@ -1,0 +1,57 @@
+N queen
+
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 24, M = 25, OO = 0x3f3f3f3f;
+int n;
+char grid[N][N];
+void printGrid(){
+  for(int i = 0 ; i < n ; ++i){
+    for(int j = 0 ; j < n ; ++j){
+      printf("%c|", grid[i][j]);
+    }
+    printf("\n");
+  }
+  printf("-----------------------\n");
+}
+int x;
+int attacked[N][N];
+void solve(int r){
+  if(r == n){
+    printGrid();
+    return;
+  }
+  for(int c = 0 ; c < n ; ++c){
+    if(!attacked[r][c]){
+      grid[r][c] = 'Q';
+      for(int i = 0 ; i < n ; ++i)  attacked[i][c]++;
+      for(int i = 0 ; i < n ; ++i)  attacked[r][i]++;
+      for(int i = -n+1 ; i < n ; ++i)
+        if(r+i>=0 && r+i<n && c+i>=0 && c+i<n)
+          attacked[r+i][c+i]++;
+      for(int i = -n+1 ; i < n ; ++i)
+        if(r+i>=0 && r+i<n && c-i>=0 && c-i<n)
+          attacked[r+i][c-i]++;
+      solve(r+1);
+      for(int i = 0 ; i < n ; ++i)  attacked[i][c]--;
+      for(int i = 0 ; i < n ; ++i)  attacked[r][i]--;
+      for(int i = -n+1 ; i < n ; ++i)
+        if(r+i>=0 && r+i<n && c+i>=0 && c+i<n)
+          attacked[r+i][c+i]--;
+      for(int i = -n+1 ; i < n ; ++i)
+        if(r+i>=0 && r+i<n && c-i>=0 && c-i<n)
+          attacked[r+i][c-i]--;
+      grid[r][c] = '.';
+    }
+  }
+  return;
+}
+
+int main(){
+  scanf("%d", &n);
+  for(int i = 0 ; i < n ; ++i)
+    for(int j = 0 ; j < n ; ++j)
+      grid[i][j] = '.';
+  solve(0);
+  return 0;
+}
